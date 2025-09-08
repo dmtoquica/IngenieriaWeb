@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conferencia Front-End: El Futuro de la Interfaz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        .card {
+            background-color: rgba(15, 23, 42, 0.5);
+            border: 1px solid #1e293b;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+        }
+        .code-block {
+            background-color: #020617;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #1e293b;
+            color: #94a3b8;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .copy-btn:hover {
+            background-color: #334155;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .roadmap-item::before {
+            content: counter(roadmap-counter);
+            counter-increment: roadmap-counter;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navegación -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-lg border-b border-slate-800">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold gradient-text">Ingeniería Front-End</h1>
+            <nav class="hidden md:flex space-x-6 text-sm text-slate-300">
+                <a href="#pilares" class="hover:text-sky-400 transition-colors">Pilares</a>
+                <a href="#frameworks" class="hover:text-sky-400 transition-colors">Frameworks</a>
+                <a href="#ecosistema" class="hover:text-sky-400 transition-colors">Ecosistema</a>
+                <a href="#futuro" class="hover:text-sky-400 transition-colors">Futuro</a>
+                <a href="#roadmap" class="hover:text-sky-400 transition-colors">Roadmap</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="pt-20">
+        <section class="min-h-[calc(100vh-80px)] flex items-center justify-center text-center relative overflow-hidden px-4">
+            <!-- Efecto de fondo -->
+            <div class="absolute inset-0 -z-10 h-full w-full bg-slate-950 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-7xl font-extrabold tracking-tight leading-tight">
+                    <span class="gradient-text">Introducción a la Ingeniería Web Front-End</span>
+                </h2>
+                <p class="mt-6 text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
+                    Más allá del código: somos los arquitectos de la experiencia digital. Descubre cómo construimos las interfaces del mañana, hoy.
+                </p>
+                <div class="mt-10">
+                    <a href="#pilares" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105">
+                        Iniciar el Viaje
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pilares Fundamentales -->
+        <section id="pilares" class="py-20 px-4 fade-in-section">
+            <div class="container mx-auto">
+                <h3 class="text-center text-3xl font-bold mb-2">Los Tres Pilares Fundamentales</h3>
+                <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">Toda la web moderna se construye sobre estas tres tecnologías inseparables.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- HTML Card -->
+                    <div class="card p-6">
+                        <h4 class="text-2xl font-bold mb-3 text-orange-400">HTML: El Esqueleto</h4>
+                        <p class="text-slate-400 mb-4">Define la estructura y el contenido semántico. Es el armazón que da sentido a la información.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" aria-label="Copiar código">Copiar</button>
+                            <pre><code class="language-html">&lt;h1&gt;Título Principal&lt;/h1&gt;
+&lt;p&gt;Un párrafo con un &lt;a href="#"&gt;enlace&lt;/a&gt;.&lt;/p&gt;
+&lt;img src="logo.png" alt="Logo"&gt;</code></pre>
+                        </div>
+                    </div>
+                    <!-- CSS Card -->
+                    <div class="card p-6">
+                        <h4 class="text-2xl font-bold mb-3 text-blue-400">CSS: El Estilo</h4>
+                        <p class="text-slate-400 mb-4">Controla la presentación visual: colores, tipografías, espaciado y diseño responsive.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" aria-label="Copiar código">Copiar</button>
+                            <pre><code class="language-css">body {
+  background: #0a0a0a;
+  color: #e2e8f0;
+}
+h1 { color: #38bdf8; }</code></pre>
+                        </div>
+                    </div>
+                    <!-- JavaScript Card -->
+                    <div class="card p-6">
+                        <h4 class="text-2xl font-bold mb-3 text-yellow-400">JavaScript: El Cerebro</h4>
+                        <p class="text-slate-400 mb-4">Añade interactividad, lógica y dinamismo. Es el motor que da vida a la interfaz.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" aria-label="Copiar código">Copiar</button>
+                            <pre><code class="language-js">const btn = document.querySelector('button');
+btn.addEventListener('click', () => {
+  console.log('¡Interfaz activada!');
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Frameworks y Librerías -->
+        <section id="frameworks" class="py-20 px-4 bg-slate-950/50 fade-in-section">
+            <div class="container mx-auto">
+                <h3 class="text-center text-3xl font-bold mb-2">Escalando con Frameworks</h3>
+                <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">Para construir aplicaciones complejas y escalables, usamos herramientas que nos dan superpoderes.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- React Card -->
+                    <div class="card p-6 flex flex-col items-center text-center">
+                        <img src="https://placehold.co/80x80/000000/38bdf8?text=React&font=inter" class="h-20 w-20 mb-4 rounded-full" alt="React Logo">
+                        <h4 class="text-xl font-bold mb-2">React</h4>
+                        <p class="text-slate-400">Una librería para construir interfaces de usuario basadas en componentes, famosa por su velocidad y ecosistema masivo.</p>
+                    </div>
+                    <!-- Angular Card -->
+                    <div class="card p-6 flex flex-col items-center text-center">
+                        <img src="https://placehold.co/80x80/000000/ef4444?text=Angular&font=inter" class="h-20 w-20 mb-4 rounded-full" alt="Angular Logo">
+                        <h4 class="text-xl font-bold mb-2">Angular</h4>
+                        <p class="text-slate-400">Un framework robusto y opinado, ideal para aplicaciones empresariales a gran escala. Mantenido por Google.</p>
+                    </div>
+                    <!-- Vue.js Card -->
+                    <div class="card p-6 flex flex-col items-center text-center">
+                        <img src="https://placehold.co/80x80/000000/4ade80?text=Vue&font=inter" class="h-20 w-20 mb-4 rounded-full" alt="Vue.js Logo">
+                        <h4 class="text-xl font-bold mb-2">Vue.js</h4>
+                        <p class="text-slate-400">El framework progresivo, conocido por su curva de aprendizaje amigable y su flexibilidad.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Ecosistema del Desarrollador -->
+        <section id="ecosistema" class="py-20 px-4 fade-in-section">
+            <div class="container mx-auto">
+                <h3 class="text-center text-3xl font-bold mb-2">El Ecosistema Moderno</h3>
+                <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">El desarrollo front-end va más allá del código. Estas son nuestras herramientas del día a día.</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="card p-6">
+                        <h4 class="font-bold text-lg">Git & GitHub</h4><p class="text-sm text-slate-400">Control de versiones y colaboración.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h4 class="font-bold text-lg">NPM / Yarn</h4><p class="text-sm text-slate-400">Gestión de paquetes y dependencias.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h4 class="font-bold text-lg">Vite / Webpack</h4><p class="text-sm text-slate-400">Empaquetado y optimización de código.</p>
+                    </div>
+                     <div class="card p-6">
+                        <h4 class="font-bold text-lg">VS Code</h4><p class="text-sm text-slate-400">Nuestro editor de código predilecto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Futuro y Principios -->
+        <section id="futuro" class="py-20 px-4 bg-slate-950/50 fade-in-section">
+            <div class="container mx-auto">
+                <h3 class="text-center text-3xl font-bold mb-2">Diseñando el Futuro</h3>
+                <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">No solo creamos interfaces, diseñamos experiencias inclusivas, rápidas y preparadas para lo que viene.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-xl font-bold mb-4 gradient-text">Principios Clave</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start"><span class="text-sky-400 mr-3 mt-1">✓</span><div><strong class="text-white">Rendimiento:</strong> La velocidad es una funcionalidad. Optimizamos para una carga y respuesta instantáneas.</div></li>
+                            <li class="flex items-start"><span class="text-sky-400 mr-3 mt-1">✓</span><div><strong class="text-white">Responsive Design:</strong> Experiencias fluidas en cualquier dispositivo, desde un móvil hasta un monitor 4K.</div></li>
+                            <li class="flex items-start"><span class="text-sky-400 mr-3 mt-1">✓</span><div><strong class="text-white">Accesibilidad (a11y):</strong> Construimos una web para todos, sin barreras.</div></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-4 gradient-text">Tendencias Emergentes</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start"><span class="text-purple-400 mr-3 mt-1">→</span><div><strong class="text-white">WebAssembly (WASM):</strong> Rendimiento casi nativo en el navegador para tareas complejas.</div></li>
+                            <li class="flex items-start"><span class="text-purple-400 mr-3 mt-1">→</span><div><strong class="text-white">IA en el Desarrollo:</strong> Herramientas como GitHub Copilot que potencian nuestra productividad.</div></li>
+                            <li class="flex items-start"><span class="text-purple-400 mr-3 mt-1">→</span><div><strong class="text-white">Edge Computing:</strong> Llevando la lógica más cerca del usuario para una latencia mínima.</div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap -->
+        <section id="roadmap" class="py-20 px-4 fade-in-section">
+            <div class="container mx-auto">
+                <h3 class="text-center text-3xl font-bold mb-2">Tu Hoja de Ruta para el Éxito</h3>
+                <p class="text-center text-slate-400 mb-12 max-w-2xl mx-auto">El camino del desarrollador es un maratón, no un sprint. Aquí tienes los pasos a seguir.</p>
+                <div class="max-w-2xl mx-auto">
+                    <ol class="space-y-8 relative" style="counter-reset: roadmap-counter;">
+                        <li class="pl-16 relative roadmap-item"><strong class="text-lg text-white">Domina los Fundamentos:</strong> Invierte tiempo en ser excelente con HTML, CSS y JavaScript. Es la base de todo.</li>
+                        <li class="pl-16 relative roadmap-item"><strong class="text-lg text-white">Aprende Git y GitHub:</strong> El control de versiones es una habilidad no negociable en el mundo profesional.</li>
+                        <li class="pl-16 relative roadmap-item"><strong class="text-lg text-white">Elige un Framework:</strong> Selecciona React, Angular o Vue y profundiza. Construye proyectos con él.</li>
+                        <li class="pl-16 relative roadmap-item"><strong class="text-lg text-white">Construye Constantemente:</strong> La teoría es inútil sin práctica. Crea un portafolio sólido que demuestre tus habilidades.</li>
+                         <li class="pl-16 relative roadmap-item"><strong class="text-lg text-white">Nunca Dejes de Aprender:</strong> La curiosidad es tu mayor activo. Este campo evoluciona a diario. ¡Mantente actualizado!</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950/50 border-t border-slate-800">
+        <div class="container mx-auto py-12 px-4 text-center">
+            <h3 class="text-3xl font-bold gradient-text mb-4">¿Preguntas?</h3>
+            <p class="text-slate-400">El viaje del desarrollo front-end es fascinante y está lleno de oportunidades.</p>
+            <p class="text-xs text-slate-600 mt-8">Diseñado como recurso educativo para la Conferencia de Ingeniería Web.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Script para animaciones de scroll
+        const sections = document.querySelectorAll('.fade-in-section');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Script para copiar código
+        const copyButtons = document.querySelectorAll('.copy-btn');
+
+        copyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const codeBlock = button.nextElementSibling.querySelector('code');
+                const codeText = codeBlock.innerText;
+                
+                // Usar execCommand como fallback para iframes
+                try {
+                    navigator.clipboard.writeText(codeText).then(() => {
+                        button.textContent = '¡Copiado!';
+                        setTimeout(() => {
+                            button.textContent = 'Copiar';
+                        }, 2000);
+                    });
+                } catch (err) {
+                    // Fallback para entornos seguros (como iframes)
+                    const textArea = document.createElement('textarea');
+                    textArea.value = codeText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    button.textContent = '¡Copiado!';
+                    setTimeout(() => {
+                        button.textContent = 'Copiar';
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
