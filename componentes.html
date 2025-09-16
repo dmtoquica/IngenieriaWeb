@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase: Desarrollo de Componentes Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Versión Definitiva - Sin Simulador Interactivo -->
+    <!-- Chosen Palette: Calm Tech Blue -->
+    <!-- Application Structure Plan: A linear, single-page narrative that mirrors the 5 phases of the provided class script. The core interactive simulator from previous versions has been removed due to instability and replaced with a static, commented code display and a live, functional demo embedded directly in the page. This guarantees reliability and focuses on clearly presenting the final solution. -->
+    <!-- Visualization & Content Choices: Problem/Analysis/Solution phases use static cards for clarity. The "Practice" phase now statically displays the final, commented JavaScript and HTML code, followed by a live demo of the component. This is more reliable than the previous interactive approach. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #0ea5e9, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .code-block {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            white-space: pre-wrap;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .code-keyword { color: #60a5fa; }
+        .code-string { color: #a3e635; }
+        .code-comment { color: #94a3b8; }
+        .code-tag { color: #f87171; }
+        .code-attr { color: #fb923c; }
+        .code-value { color: #a3e635; }
+        .code-number { color: #facc15; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="header" class="bg-slate-50/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-10 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <h2 class="text-lg font-bold text-slate-700">Componentes Web</h2>
+                </div>
+                <nav class="hidden md:flex md:space-x-8">
+                    <a href="#problema" class="font-medium text-slate-600 hover:text-blue-600">El Problema</a>
+                    <a href="#analisis" class="font-medium text-slate-600 hover:text-blue-600">Análisis</a>
+                    <a href="#solucion" class="font-medium text-slate-600 hover:text-blue-600">La Solución</a>
+                    <a href="#practica" class="font-medium text-slate-600 hover:text-blue-600">Práctica</a>
+                    <a href="#conclusion" class="font-medium text-slate-600 hover:text-blue-600">Conclusión</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <section id="hero" class="py-20 sm:py-28">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+                    <span class="block text-slate-800">Desarrollo de</span>
+                    <span class="gradient-text block">Componentes Web Nativos</span>
+                </h1>
+                <p class="mt-6 text-lg text-slate-600 max-w-2xl mx-auto">
+                    Una clase interactiva guiada por un problema para aprender a construir elementos HTML encapsulados, reutilizables y a prueba de futuro.
+                </p>
+            </div>
+        </section>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 sm:space-y-28 pb-20 sm:pb-28">
+
+            <section id="problema">
+                <div class="text-center mb-12">
+                    <h2 class="text-sm font-semibold text-blue-600">Fase 1</h2>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">La Presentación del Problema</h3>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Bienvenido al equipo de **ConnectSphere**. La startup crece rápido, pero también lo hace el caos en nuestra interfaz de usuario.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h4 class="text-xl font-semibold text-slate-800 text-center">El Epicentro del Caos: Los Botones</h4>
+                    <p class="text-center text-slate-500 mt-2 mb-8">Cada desarrollador ha creado su propia versión. El resultado es inconsistencia y un mantenimiento imposible.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-center justify-items-center">
+                        <div class="text-center group">
+                            <button style="padding: 10px 15px; background-color: blue; color: white; border:none; border-radius: 4px;">Equipo Marketing</button>
+                        </div>
+                        <div class="text-center group">
+                            <button style="padding: 12px 16px; background-color: #0000FF; color: white; border:none; border-radius: 5px;">Equipo Perfil</button>
+                        </div>
+                         <div class="text-center group">
+                            <button style="padding: 8px 12px; background-color: blue; color: white; border:none; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;"><span>🚀</span> Equipo Features</button>
+                        </div>
+                        <div class="text-center group">
+                            <button style="padding: 10px 20px; background-color: royalblue; color: white; border:none; border-radius: 4px;">Nuevo Dev</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="analisis">
+                <div class="text-center mb-12">
+                    <h2 class="text-sm font-semibold text-blue-600">Fase 2</h2>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Análisis del Problema</h3>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Una solución simple como una clase CSS global es un buen inicio, pero tiene serias limitaciones.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h4 class="font-semibold text-slate-800">1. Estructura HTML frágil</h4>
+                        <p class="text-slate-600 mt-2 text-sm">Los desarrolladores deben seguir copiando y pegando el HTML correcto. Un error aquí y la consistencia se rompe.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h4 class="font-semibold text-slate-800">2. Falta de Encapsulación</h4>
+                        <p class="text-slate-600 mt-2 text-sm">Los estilos globales pueden afectar a nuestros botones y viceversa. Esto lleva a conflictos de CSS y guerras de `!important`.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h4 class="font-semibold text-slate-800">3. Comportamiento Desacoplado</h4>
+                        <p class="text-slate-600 mt-2 text-sm">La lógica JavaScript está separada. Hay que recordar añadirla y puede volverse inconsistente fácilmente.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="solucion">
+                <div class="text-center mb-12">
+                    <h2 class="text-sm font-semibold text-blue-600">Fase 3</h2>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">La Solución: Componentes Web Nativos</h3>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Un conjunto de estándares del navegador diseñados para resolver precisamente este problema, sin necesidad de frameworks.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <div class="text-4xl"><span class="inline-block bg-blue-100 text-blue-600 p-3 rounded-full">&lt;/&gt;</span></div>
+                        <h4 class="mt-4 font-bold text-lg text-slate-800">Custom Elements</h4>
+                        <p class="mt-2 text-slate-600 text-sm">Permiten crear tus propias etiquetas HTML (ej. `<connect-button>`) con su propia lógica.</p>
+                    </div>
+                     <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <div class="text-4xl"><span class="inline-block bg-blue-100 text-blue-600 p-3 rounded-full">🛡️</span></div>
+                        <h4 class="mt-4 font-bold text-lg text-slate-800">Shadow DOM</h4>
+                        <p class="mt-2 text-slate-600 text-sm">Proporciona encapsulamiento total. Los estilos y la estructura están 100% aislados del resto de la página.</p>
+                    </div>
+                     <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <div class="text-4xl"><span class="inline-block bg-blue-100 text-blue-600 p-3 rounded-full">📄</span></div>
+                        <h4 class="mt-4 font-bold text-lg text-slate-800">HTML Templates & Slots</h4>
+                        <p class="mt-2 text-slate-600 text-sm">Permiten definir un "molde" reutilizable para la estructura del componente.</p>
+                    </div>
+                </div>
+            </section>
+
+             <section id="practica">
+                <div class="text-center mb-12">
+                    <h2 class="text-sm font-semibold text-blue-600">Fase 4</h2>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Código de la Solución</h3>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Este es el código final para crear nuestro componente. Está dividido en el JavaScript que lo define y el HTML que lo utiliza.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-2xl overflow-hidden p-6 space-y-8">
+                    <div>
+                        <h4 class="text-lg font-semibold text-slate-800">1. El Componente (connect-button.js)</h4>
+                        <p class="text-sm text-slate-500 mt-1 mb-4">Este código define la estructura, estilos y lógica de nuestro botón.</p>
+                        <div class="code-block" id="js-code-static"></div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold text-slate-800">2. El Uso (index.html)</h4>
+                        <p class="text-sm text-slate-500 mt-1 mb-4">Así de simple es usar nuestro nuevo componente en cualquier parte de la aplicación.</p>
+                        <div class="code-block" id="html-code-static"></div>
+                    </div>
+                    
+                    <div>
+                         <h4 class="text-lg font-semibold text-slate-800">3. Resultado Final en Vivo</h4>
+                         <p class="text-sm text-slate-500 mt-1 mb-4">A continuación ves los componentes funcionales, creados por el código anterior.</p>
+                         <div class="mt-2 w-full bg-white rounded-md border border-slate-200 p-8 flex items-center justify-center gap-4">
+                            <connect-button>Iniciar Sesión</connect-button>
+                            <connect-button>Registrarse Gratis</connect-button>
+                         </div>
+                    </div>
+                </div>
+            </section>
+
+             <section id="conclusion">
+                <div class="text-center mb-12">
+                    <h2 class="text-sm font-semibold text-blue-600">Fase 5</h2>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Reflexión y Conclusión</h3>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Hemos transformado un problema caótico en una solución de ingeniería elegante, robusta y escalable.</p>
+                </div>
+
+                <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+                    <h4 class="text-lg font-semibold text-slate-800 mb-4">Problema resuelto:</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-3 mt-1">✔</span>
+                            <div>
+                                <span class="font-semibold text-slate-700">Consistencia:</span>
+                                <span class="text-slate-600"> Todos los botones se basan en un único molde, garantizando una UI unificada.</span>
+                            </div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-green-500 mr-3 mt-1">✔</span>
+                            <div>
+                                <span class="font-semibold text-slate-700">Mantenimiento:</span>
+                                <span class="text-slate-600"> Un cambio en un solo lugar (el template) actualiza todos los botones de la aplicación al instante.</span>
+                            </div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-green-500 mr-3 mt-1">✔</span>
+                            <div>
+                                <span class="font-semibold text-slate-700">Encapsulamiento:</span>
+                                <span class="text-slate-600"> Gracias al Shadow DOM, nuestros botones son inmunes a conflictos de estilos externos.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-slate-100 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-slate-500">
+            <p>&copy; 2025 Clase de Desarrollo Web. Creado como una experiencia de aprendizaje interactiva.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- CÓDIGO DEL COMPONENTE WEB ---
+        // Este script se ejecuta al cargar la página y hace que los <connect-button> de la Fase 4 funcionen.
+
+        // 1. Creamos un "template" (molde) que contendrá el HTML y CSS de nuestro botón.
+        const buttonTemplate = document.createElement('template');
+
+        // 2. Definimos el contenido del molde.
+        buttonTemplate.innerHTML = `
+          <style>
+            /* Estos estilos están 100% encapsulados gracias al Shadow DOM. */
+            /* No afectarán a nada fuera del componente, ni serán afectados desde fuera. */
+            .btn {
+              background-color: #3B82F6; /* blue-500 */
+              color: white;
+              border: none;
+              padding: 12px 20px;
+              border-radius: 8px;
+              font-family: inherit;
+              cursor: pointer;
+              font-weight: 600;
+              transition: background-color 0.2s;
+              display: inline-block;
+            }
+            .btn:hover {
+              background-color: #2563EB; /* blue-600 */
+            }
+          </style>
+          <button class="btn">
+            <!-- El <slot> es un marcador de posición. Aquí se insertará el texto que pongamos dentro de nuestra etiqueta. -->
+            <!-- Ejemplo: <connect-button>Este texto</connect-button> irá al slot. -->
+            <slot></slot>
+          </button>
+        `;
+
+        // 3. Creamos la clase para nuestro componente. Debe heredar de HTMLElement.
+        class ConnectButton extends HTMLElement {
+          constructor() {
+            // 4. Siempre llamar a super() primero en el constructor.
+            super();
+            
+            // 5. Activamos el Shadow DOM en modo 'open' para encapsular el contenido.
+            this.attachShadow({ mode: 'open' });
+            
+            // 6. Clonamos el contenido de nuestro template y lo añadimos al Shadow DOM.
+            this.shadowRoot.appendChild(buttonTemplate.content.cloneNode(true));
+          }
+        }
+
+        // 7. Finalmente, registramos nuestro nuevo elemento en el navegador.
+        // Le decimos al navegador que cada vez que vea la etiqueta <connect-button>,
+        // debe usar nuestra clase ConnectButton para crear el elemento.
+        customElements.define('connect-button', ConnectButton);
+
+    </script>
+    
+    <script>
+        // --- SCRIPT PARA MOSTRAR EL CÓDIGO ESTÁTICO EN LA PÁGINA ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const highlightSyntax = (code) => {
+                 return code
+                    .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/\b(class|extends|constructor|super|this|const|let|document|customElements|true|false)\b/g, '<span class="code-keyword">$&</span>')
+                    .replace(/(\/\/.+)/g, '<span class="code-comment">$&</span>')
+                    .replace(/(['`]).*?\1/gs, '<span class="code-string">$&</span>')
+                    .replace(/(&lt;\/?)(style|button|slot|script|connect-button)(&gt;)/g, '$1<span class="code-tag">$2</span>$3')
+                    .replace(/ ([a-zA-Z-]+)=/g, ' <span class="code-attr">$1</span>=')
+                    .replace(/="(.+?)"/g, '="<span class="code-value">$1</span>"')
+                    .replace(/\b(\d+)\b/g, '<span class="code-number">$1</span>');
+            };
+
+            const jsCodeStaticEl = document.getElementById('js-code-static');
+            const htmlCodeStaticEl = document.getElementById('html-code-static');
+
+            const jsCodeContent = `// 1. Creamos un "template" que contendrá el HTML y CSS de nuestro botón.
+const buttonTemplate = document.createElement('template');
+
+// 2. Definimos el contenido del molde con su estilo encapsulado y un <slot>.
+buttonTemplate.innerHTML = \`
+  <style>
+    .btn {
+      background-color: #3B82F6;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+  </style>
+  <button class="btn">
+    <slot></slot>
+  </button>
+\`;
+
+// 3. Creamos la clase para nuestro componente, heredando de HTMLElement.
+class ConnectButton extends HTMLElement {
+  constructor() {
+    super();
+    // 4. Activamos el Shadow DOM para encapsular.
+    this.attachShadow({ mode: 'open' });
+    // 5. Clonamos el contenido del template en el Shadow DOM.
+    this.shadowRoot.appendChild(buttonTemplate.content.cloneNode(true));
+  }
+}
+
+// 6. Finalmente, registramos el nuevo elemento en el navegador.
+customElements.define('connect-button', ConnectButton);`;
+            
+            const htmlCodeContent = `<!-- Después de incluir el script anterior, podemos usar la etiqueta donde queramos -->
+
+<connect-button>Iniciar Sesión</connect-button>
+
+<connect-button>Registrarse Gratis</connect-button>`;
+
+            jsCodeStaticEl.innerHTML = highlightSyntax(jsCodeContent);
+            htmlCodeStaticEl.innerHTML = highlightSyntax(htmlCodeContent);
+        });
+    </script>
+
+</body>
+</html>
