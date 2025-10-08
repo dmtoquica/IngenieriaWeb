@@ -1,0 +1,37 @@
+@startuml
+' Título del diagrama
+title Flujo de Petición POST para Crear una Tarea
+
+' Numera los pasos automáticamente
+autonumber
+
+' Define los participantes (las capas de la arquitectura)
+participant "Cliente" as Client
+participant "Capa de Rutas\n(task.routes.js)" as Routes
+participant "Capa de Controladores\n(task.controller.js)" as Controller
+participant "Capa de Modelos\n(task.model.js)" as Model
+
+' Inicia la secuencia de mensajes
+Client -> Routes: Petición POST /tasks con datos JSON
+activate Routes
+
+' La capa de rutas pasa el control al controlador
+Routes -> Controller: Llama a la función createTask()
+activate Controller
+deactivate Routes
+
+' El controlador interactúa con el modelo para crear los datos
+Controller -> Model: Llama a la función create(datos)
+activate Model
+
+' El modelo realiza la operación interna de guardado
+Model -> Model: Guarda la nueva tarea en el array
+' El modelo devuelve el resultado al controlador
+Model --> Controller: Devuelve el objeto de la nueva tarea
+deactivate Model
+
+' El controlador envía la respuesta final al cliente
+Controller --> Client: Envía respuesta "201 Created" con JSON
+deactivate Controller
+
+@enduml
