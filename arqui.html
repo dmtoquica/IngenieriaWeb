@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitecturas y Patrones de Back-end: La Web Interactiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .architecture-block {
+            transition: all 0.3s ease-in-out;
+            border: 2px solid;
+        }
+        .service-block {
+            transition: all 0.3s ease-in-out;
+            border: 2px solid;
+        }
+        .crashed {
+            background-color: #ef4444 !important;
+            border-color: #b91c1c !important;
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+        .crashed::after {
+            content: 'FALLO';
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+        }
+        .output-block {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #020617;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900">Arquitecturas y Patrones de Back-end</h1>
+            <p class="mt-4 text-lg text-slate-600">Una guía interactiva del "Doc" Gemini.</p>
+        </header>
+
+        <!-- Section: Architectures -->
+        <section id="architectures" class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 border-b-4 border-cyan-500 pb-2 mb-8">1. Arquitecturas Comunes</h2>
+            
+            <div class="flex justify-center mb-8 space-x-2 md:space-x-4">
+                <button onclick="showArch('monolith')" id="btn-monolith" class="px-4 py-2 rounded-lg font-semibold bg-cyan-500 text-white shadow-md">Monolítica</button>
+                <button onclick="showArch('microservices')" id="btn-microservices" class="px-4 py-2 rounded-lg font-semibold bg-slate-200 text-slate-700">Microservicios</button>
+            </div>
+
+            <!-- Monolith Content -->
+            <div id="monolith-content" class="arch-content">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Arquitectura Monolítica 🧱</h3>
+                    <p class="mb-6 text-slate-600">Una única y gran unidad de código para toda la aplicación. Fácil de empezar, pero difícil de escalar y mantener a largo plazo.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <!-- Interactive Demo -->
+                        <div>
+                            <h4 class="font-semibold mb-4 text-lg">Simulación Práctica</h4>
+                            <div id="monolith-sim" class="relative w-full h-48 md:h-64 bg-cyan-100 border-cyan-500 rounded-lg flex items-center justify-center architecture-block p-4">
+                                <div class="text-center font-semibold text-cyan-800">
+                                    <p class="text-xl">APP COMPLETA</p>
+                                    <span class="text-sm">(UI, Lógica, Datos)</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-4">
+                                <div>
+                                    <label for="monolith-traffic" class="font-medium">Carga de Tráfico:</label>
+                                    <input type="range" id="monolith-traffic" min="1" max="1.5" step="0.05" value="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                                <div class="flex space-x-4">
+                                    <button onclick="triggerMonolithBug()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">Introducir Bug Crítico 🐞</button>
+                                    <button onclick="resetMonolith()" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Resetear</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pros and Cons -->
+                        <div>
+                            <h4 class="font-semibold mb-4 text-lg">Ventajas y Desventajas</h4>
+                            <div class="space-y-4">
+                                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-r-lg">
+                                    <p><strong class="font-semibold">Ventajas:</strong> Simplicidad inicial, desarrollo rápido, ideal para MVPs.</p>
+                                </div>
+                                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg">
+                                    <p><strong class="font-semibold">Desventajas:</strong> Difícil de escalar (o todo o nada), un fallo tumba todo el sistema, acoplamiento tecnológico.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Microservices Content -->
+            <div id="microservices-content" class="arch-content hidden">
+                 <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Arquitectura de Microservicios 🧩</h3>
+                    <p class="mb-6 text-slate-600">La aplicación se descompone en pequeños servicios independientes que se comunican por la red. Permite escalabilidad granular y tolerancia a fallos.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <!-- Interactive Demo -->
+                        <div>
+                            <h4 class="font-semibold mb-4 text-lg">Simulación Práctica</h4>
+                            <div class="w-full h-48 md:h-64 grid grid-cols-2 gap-2 p-2 bg-slate-100 rounded-lg">
+                                <div id="ms-users" class="relative service-block bg-teal-100 border-teal-500 rounded-lg flex items-center justify-center text-center font-semibold text-teal-800 text-sm">Servicio<br>Usuarios</div>
+                                <div id="ms-products" class="relative service-block bg-sky-100 border-sky-500 rounded-lg flex items-center justify-center text-center font-semibold text-sky-800 text-sm">Servicio<br>Productos</div>
+                                <div id="ms-payments" class="relative service-block bg-indigo-100 border-indigo-500 rounded-lg flex items-center justify-center text-center font-semibold text-indigo-800 text-sm">Servicio<br>Pagos</div>
+                                <div id="ms-notifications" class="relative service-block bg-violet-100 border-violet-500 rounded-lg flex items-center justify-center text-center font-semibold text-violet-800 text-sm">Servicio<br>Notificaciones</div>
+                            </div>
+                             <div class="mt-4 space-y-4">
+                                <div>
+                                    <label for="microservices-traffic" class="font-medium">Carga en Servicio de Pagos:</label>
+                                    <input type="range" id="microservices-traffic" min="1" max="2" step="0.1" value="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                                <div class="flex space-x-4">
+                                    <button onclick="triggerMicroserviceBug()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">Bug en Notificaciones 🐞</button>
+                                    <button onclick="resetMicroservices()" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Resetear</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pros and Cons -->
+                        <div>
+                            <h4 class="font-semibold mb-4 text-lg">Ventajas y Desventajas</h4>
+                            <div class="space-y-4">
+                                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-r-lg">
+                                    <p><strong class="font-semibold">Ventajas:</strong> Escalabilidad granular, tolerancia a fallos, autonomía de equipos y libertad tecnológica.</p>
+                                </div>
+                                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg">
+                                    <p><strong class="font-semibold">Desventajas:</strong> Mayor complejidad operacional (red, despliegue, monitorización), latencia de red.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Patterns -->
+        <section id="patterns" class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 border-b-4 border-violet-500 pb-2 mb-8">2. Patrones de Diseño</h2>
+            
+            <div class="space-y-6">
+                <!-- Repository Pattern -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">Patrón de Repositorio 📚</h3>
+                    <p class="mb-4 text-slate-600">Abstrae el acceso a datos. La lógica de negocio no sabe si los datos vienen de SQL, NoSQL o un archivo. ¡Es un mediador!</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="code-block">
+const UserService = {
+  // El servicio solo conoce la interfaz
+  constructor(userRepository) {
+    this.repo = userRepository;
+  },
+  getUser(id) {
+    return this.repo.getUserById(id);
+  }
+};
+
+// --- Implementaciones ---
+const PostgresRepo = {
+  getUserById(id) {
+    return `(SQL) Buscando usuario ${id}...`;
+  }
+};
+const MongoRepo = {
+  getUserById(id) {
+    return `(NoSQL) Finding user ${id}...`;
+  }
+};
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-2">Prueba el patrón:</p>
+                            <select id="repo-select" class="w-full p-2 border rounded-lg mb-4">
+                                <option value="postgres">Usar PostgreSQL</option>
+                                <option value="mongo">Usar MongoDB</option>
+                            </select>
+                            <button onclick="runRepository()" class="w-full bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">Obtener Usuario con ID 123</button>
+                            <p class="font-semibold mt-4 mb-2">Resultado:</p>
+                            <div id="repo-output" class="output-block"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Pattern -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">Patrón de Estrategia ♟️</h3>
+                    <p class="mb-4 text-slate-600">Permite seleccionar un algoritmo o comportamiento en tiempo de ejecución. Ideal para familias de algoritmos intercambiables, como métodos de pago.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="code-block">
+// --- Estrategias ---
+const CreditCardStrategy = {
+  pay(amount) {
+    return `Pagando ${amount}€ con Tarjeta de Crédito...`;
+  }
+};
+const PayPalStrategy = {
+  pay(amount) {
+    return `Pagando ${amount}€ con PayPal...`;
+  }
+};
+
+// --- Contexto ---
+const PaymentContext = {
+  // El contexto no sabe qué estrategia usa
+  processPayment(strategy, amount) {
+    return strategy.pay(amount);
+  }
+};
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-2">Elige una estrategia de pago:</p>
+                            <div class="flex space-x-4 mb-4">
+                                <button onclick="runStrategy('credit-card')" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">Tarjeta</button>
+                                <button onclick="runStrategy('paypal')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">PayPal</button>
+                            </div>
+                            <p class="font-semibold mt-4 mb-2">Resultado:</p>
+                            <div id="strategy-output" class="output-block"></div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Facade Pattern -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2">Patrón de Fachada 🤵</h3>
+                    <p class="mb-4 text-slate-600">Proporciona una interfaz simple a un subsistema complejo. Es como el encargado de un restaurante que gestiona la cocina, los camareros y la caja por ti.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="code-block">
+// --- Subsistemas Complejos ---
+const InventorySystem = { check() { return '1. Stock verificado.'; } };
+const PaymentSystem = { process() { return '2. Pago procesado.'; } };
+const ShippingSystem = { ship() { return '3. Envío programado.'; } };
+
+// --- Fachada ---
+const OrderFacade = {
+  placeOrder() {
+    let log = [];
+    log.push(InventorySystem.check());
+    log.push(PaymentSystem.process());
+    log.push(ShippingSystem.ship());
+    log.push('¡Pedido completado!');
+    return log.join('\n');
+  }
+};
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-2">Usa la fachada para simplificar:</p>
+                             <button onclick="runFacade()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg transition-colors mb-4">Realizar Pedido (1 Clic)</button>
+                            <p class="font-semibold mt-4 mb-2">Log de operaciones internas:</p>
+                            <div id="facade-output" class="output-block"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Conclusion -->
+        <section id="conclusion" class="text-center bg-white p-8 rounded-xl shadow-lg">
+             <h2 class="text-3xl font-bold text-slate-900 mb-4">Conclusión: El Contexto es Clave</h2>
+             <p class="text-slate-600 mb-6 max-w-3xl mx-auto">No hay una "bala de plata". La mejor arquitectura depende de tu proyecto, equipo y objetivos. Un monolito puede ser perfecto para empezar, mientras que los microservicios son ideales para escalar.</p>
+             <div class="bg-slate-100 p-6 rounded-lg">
+                <p class="font-semibold text-lg mb-4">Tu Turno: Eres el Arquitecto</p>
+                <p class="mb-4">Para lanzar un nuevo producto (MVP) con un equipo de 2 desarrolladores, ¿qué arquitectura elegirías para empezar?</p>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="showConclusionFeedback(true)" class="px-6 py-2 rounded-lg font-semibold bg-cyan-500 text-white">Monolítica</button>
+                    <button onclick="showConclusionFeedback(false)" class="px-6 py-2 rounded-lg font-semibold bg-slate-400 text-white">Microservicios</button>
+                </div>
+                <p id="conclusion-feedback" class="mt-4 font-medium h-6"></p>
+             </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- ARCHITECTURE LOGIC ---
+        const monolithSim = document.getElementById('monolith-sim');
+        const monolithTrafficSlider = document.getElementById('monolith-traffic');
+        
+        const microservices = {
+            users: document.getElementById('ms-users'),
+            products: document.getElementById('ms-products'),
+            payments: document.getElementById('ms-payments'),
+            notifications: document.getElementById('ms-notifications')
+        };
+        const microservicesTrafficSlider = document.getElementById('microservices-traffic');
+
+        function showArch(type) {
+            document.getElementById('monolith-content').classList.toggle('hidden', type !== 'monolith');
+            document.getElementById('microservices-content').classList.toggle('hidden', type !== 'microservices');
+            
+            document.getElementById('btn-monolith').classList.toggle('bg-cyan-500', type === 'monolith');
+            document.getElementById('btn-monolith').classList.toggle('text-white', type === 'monolith');
+            document.getElementById('btn-monolith').classList.toggle('bg-slate-200', type !== 'monolith');
+            document.getElementById('btn-monolith').classList.toggle('text-slate-700', type !== 'monolith');
+
+            document.getElementById('btn-microservices').classList.toggle('bg-cyan-500', type === 'microservices');
+            document.getElementById('btn-microservices').classList.toggle('text-white', type === 'microservices');
+            document.getElementById('btn-microservices').classList.toggle('bg-slate-200', type !== 'microservices');
+            document.getElementById('btn-microservices').classList.toggle('text-slate-700', type !== 'microservices');
+
+            resetAll();
+        }
+
+        monolithTrafficSlider.addEventListener('input', (e) => {
+            monolithSim.style.transform = `scale(${e.target.value})`;
+        });
+
+        microservicesTrafficSlider.addEventListener('input', (e) => {
+            microservices.payments.style.transform = `scale(${e.target.value})`;
+        });
+        
+        function triggerMonolithBug() {
+            monolithSim.classList.add('crashed');
+        }
+
+        function resetMonolith() {
+            monolithSim.classList.remove('crashed');
+            monolithTrafficSlider.value = 1;
+            monolithSim.style.transform = 'scale(1)';
+        }
+
+        function triggerMicroserviceBug() {
+            microservices.notifications.classList.add('crashed');
+        }
+        
+        function resetMicroservices() {
+            Object.values(microservices).forEach(el => el.classList.remove('crashed'));
+            microservicesTrafficSlider.value = 1;
+            microservices.payments.style.transform = 'scale(1)';
+        }
+
+        function resetAll() {
+            resetMonolith();
+            resetMicroservices();
+        }
+
+        // --- PATTERNS LOGIC ---
+
+        // Repository
+        const repoOutput = document.getElementById('repo-output');
+        const repoSelect = document.getElementById('repo-select');
+
+        function runRepository() {
+            const PostgresRepo = { getUserById: id => `(SQL) Buscando usuario ${id} desde PostgreSQL... ¡Encontrado!` };
+            const MongoRepo = { getUserById: id => `(NoSQL) Finding user ${id} from MongoDB... Found!` };
+            
+            const selectedRepo = repoSelect.value === 'postgres' ? PostgresRepo : MongoRepo;
+            
+            // El servicio no cambia, solo su dependencia inyectada.
+            const userService = { repo: selectedRepo, getUser: function(id) { return this.repo.getUserById(id); }};
+            
+            repoOutput.textContent = userService.getUser(123);
+        }
+
+        // Strategy
+        const strategyOutput = document.getElementById('strategy-output');
+
+        function runStrategy(type) {
+            const CreditCardStrategy = { pay: amount => `Procesando ${amount}€ con pasarela de Tarjeta de Crédito... ¡Pago Aceptado!` };
+            const PayPalStrategy = { pay: amount => `Redirigiendo a PayPal para pagar ${amount}€... ¡Pago Confirmado!` };
+            
+            const selectedStrategy = type === 'credit-card' ? CreditCardStrategy : PayPalStrategy;
+            
+            // El contexto de pago usa la estrategia seleccionada.
+            const PaymentContext = { processPayment: (strategy, amount) => strategy.pay(amount) };
+
+            strategyOutput.textContent = PaymentContext.processPayment(selectedStrategy, 99.99);
+        }
+
+        // Facade
+        const facadeOutput = document.getElementById('facade-output');
+        
+        function runFacade() {
+            const InventorySystem = { check: () => '1. Stock verificado en Almacén Central.' };
+            const PaymentSystem = { process: () => '2. Pago procesado con el banco.' };
+            const ShippingSystem = { ship: () => '3. Orden de envío generada para Logística.' };
+
+            const OrderFacade = {
+                placeOrder() {
+                    let log = [];
+                    log.push(InventorySystem.check());
+                    log.push(PaymentSystem.process());
+                    log.push(ShippingSystem.ship());
+                    log.push('\n✨ ¡Pedido completado con éxito! ✨');
+                    return log.join('\n');
+                }
+            };
+            
+            facadeOutput.textContent = OrderFacade.placeOrder();
+        }
+
+        // --- CONCLUSION LOGIC ---
+        const conclusionFeedback = document.getElementById('conclusion-feedback');
+
+        function showConclusionFeedback(isCorrect) {
+            if (isCorrect) {
+                conclusionFeedback.textContent = '¡Correcto! Es la opción más rápida y sencilla para validar una idea.';
+                conclusionFeedback.style.color = '#10b981'; // green-500
+            } else {
+                conclusionFeedback.textContent = 'Aunque posible, suele añadir una complejidad innecesaria al principio.';
+                conclusionFeedback.style.color = '#f59e0b'; // amber-500
+            }
+        }
+        
+        // Initialize
+        showArch('monolith');
+    </script>
+</body>
+</html>

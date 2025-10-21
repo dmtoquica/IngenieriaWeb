@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller: Pruebas de Integración y Seguridad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+        }
+        .code-block {
+            background-color: #1e293b; /* Slate-800 */
+            color: #e2e8f0; /* Slate-200 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+        }
+        .code-title {
+            background-color: #334155; /* Slate-700 */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            font-weight: 600;
+        }
+        .test-result-box {
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .status-pass {
+            background-color: #d1fae5; /* Green-100 */
+            color: #065f46; /* Green-800 */
+            border-left: 4px solid #10b981; /* Green-500 */
+        }
+        .status-fail {
+            background-color: #fee2e2; /* Red-100 */
+            color: #991b1b; /* Red-800 */
+            border-left: 4px solid #ef4444; /* Red-500 */
+        }
+        .icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-6 md:p-10">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-6 border-b-4 border-indigo-500 pb-2">
+            🧪 Taller: Pruebas de Integración y Seguridad
+        </h1>
+        <p class="text-gray-600 mb-8">
+            En este taller virtual, aplicaremos los principios de **Pruebas de Integración** y **Seguridad (DevSecOps)** a un escenario de Microservicios usando Python, simulando la ejecución en VS Code.
+        </p>
+
+        <!-- Escenario -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-indigo-700 mb-4">1. El Escenario: Cálculo de Precios Seguro</h2>
+            <p class="mb-4 text-gray-700">
+                Tenemos dos módulos que deben interactuar para calcular el precio final de un producto:
+            </p>
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg flex-1 shadow-md">
+                    <p class="font-semibold text-lg text-blue-800">Módulo A: ProductService</p>
+                    <p class="text-sm text-gray-600">Obtiene el precio base y llama al servicio de impuestos.</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg flex-1 shadow-md">
+                    <p class="font-semibold text-lg text-purple-800">Módulo B: TaxService</p>
+                    <p class="text-sm text-gray-600">Aplica el impuesto (15% fijo, nuestro Stub/Mock) y requiere un **token interno de seguridad**.</p>
+                </div>
+            </div>
+            <p class="mt-4 italic text-sm text-gray-500">
+                Estrategia: Abordaje Top-Down (Descendente). Probamos la conexión del Módulo A con el Módulo B.
+            </p>
+        </div>
+
+        <!-- Código de Simulación -->
+        <h2 class="text-2xl font-bold text-indigo-700 mb-4">2. El Código (api_mocks.py)</h2>
+        <p class="text-gray-700 mb-4">
+            Este código simula la lógica de nuestros dos microservicios.
+        </p>
+        <div class="code-title">python:api_mocks.py (Simulación de Servicios)</div>
+        <pre class="code-block whitespace-pre-wrap">
+# --- Módulo B: TaxService (Simulación de API) ---
+def tax_service_api(precio_base, region_id, auth_token):
+    # 1. PRUEBA DE SEGURIDAD (AUTORIZACIÓN SERVICE-TO-SERVICE)
+    if auth_token != "TOKEN_SERVICE_INTERNO_SEGURO":
+        return {"status": 401, "error": "Acceso Denegado. Token inválido."}
+    
+    # 2. PRUEBA DE INTEGRACIÓN FUNCIONAL (VALIDACIÓN DE DATOS)
+    if not (isinstance(precio_base, (int, float)) and precio_base > 0):
+        return {"status": 400, "error": "Precio base inválido."}
+        
+    tasa_impuesto = 0.15 # 15% (Nuestro STUB fijo)
+    precio_con_impuesto = precio_base * (1 + tasa_impuesto)
+    
+    return {"status": 200, "precio_final": round(precio_con_impuesto, 2)}
+
+# --- Módulo A: ProductService (Lógica de Integración) ---
+def calcular_precio_total(product_id, region_id, service_auth_token):
+    # Simulación: Obtener precio base
+    precio_base = 100.0 if product_id == 102 else 50.0 
+        
+    # Llamada de Integración al TaxService
+    respuesta_tax = tax_service_api(precio_base, region_id, service_auth_token)
+    
+    if respuesta_tax["status"] != 200:
+        # El ProductService maneja el fallo del TaxService
+        return {"status": 503, "error": f"Error al integrar: {respuesta_tax['error']}"}
+
+    return {"status": 200, "precio_final": respuesta_tax["precio_final"]}
+        </pre>
+
+        <!-- Código de Pruebas -->
+        <h2 class="text-2xl font-bold text-indigo-700 mt-8 mb-4">3. Los Casos de Prueba (`test_integracion.py`)</h2>
+        <p class="text-gray-700 mb-4">
+            Definimos los casos para **pytest** que validan tanto el flujo correcto como el flujo seguro.
+        </p>
+        <div class="code-title">python:test_integracion.py (Casos de Prueba)</div>
+        <pre class="code-block whitespace-pre-wrap">
+TOKEN_VALIDO = "TOKEN_SERVICE_INTERNO_SEGURO"
+TOKEN_INVALIDO = "token_de_un_atacante"
+
+# I-001: PRUEBA FUNCIONAL - Flujo Correcto
+def test_integracion_flujo_correcto():
+    # Producto de 50.0. Esperado: 50 * 1.15 = 57.50
+    resultado = calcular_precio_total(product_id=101, region_id=1, service_auth_token=TOKEN_VALIDO)
+    assert resultado["status"] == 200
+    assert resultado["precio_final"] == 57.50
+
+# I-002: PRUEBA FUNCIONAL - Validación de Interfaz
+def test_integracion_dato_invalido():
+    # Simula el TaxService siendo llamado con un precio negativo
+    resultado_tax = tax_service_api(precio_base=-10.0, region_id=1, auth_token=TOKEN_VALIDO)
+    assert resultado_tax["status"] == 400
+    assert "Precio base inválido" in resultado_tax["error"]
+
+# S-001: PRUEBA DE SEGURIDAD - Autorización Service-to-Service
+def test_seguridad_autorizacion_invalida():
+    # Simula un atacante intentando llamar al servicio interno con un token falso.
+    resultado = calcular_precio_total(product_id=102, region_id=1, service_auth_token=TOKEN_INVALIDO)
+    # Esperamos que el TaxService devuelva 401 y el ProductService lo gestione con 503
+    assert resultado["status"] == 503
+    assert "Acceso Denegado" in resultado["error"]
+        </pre>
+
+        <!-- Ejecución y Resultados -->
+        <h2 class="text-2xl font-bold text-indigo-700 mt-8 mb-4">4. Simulación de Ejecución (pytest)</h2>
+        <p class="text-gray-700 mb-4">
+            Presiona el botón para ejecutar los casos de prueba y ver si nuestro sistema integrado cumple con los requisitos funcionales y de seguridad.
+        </p>
+
+        <button onclick="runIntegrationTests()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition duration-200 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50">
+            ▶️ EJECUTAR PRUEBAS DE INTEGRACIÓN
+        </button>
+
+        <div id="results-container" class="mt-6">
+            <!-- Los resultados se inyectarán aquí -->
+            <p class="text-center text-gray-500 italic" id="initial-message">Presiona el botón para iniciar la simulación.</p>
+        </div>
+
+        <div class="mt-8 pt-4 border-t border-gray-200">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Conclusión del Taller</h3>
+            <p class="text-gray-700">
+                Las pruebas de integración son el puente entre el código que funciona (Unitarias) y el sistema que funciona. La prueba S-001 demostró que la seguridad en la comunicación (**Autorización Service-to-Service**) es un requisito indispensable de la integración, evitando que un atacante salte las capas de seguridad.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Módulos Simulados (Adaptación del código Python a JS) ---
+
+        const TOKEN_VALIDO = "TOKEN_SERVICE_INTERNO_SEGURO";
+        const TOKEN_INVALIDO = "token_de_un_atacante";
+
+        /**
+         * Simula la API del TaxService (Módulo B).
+         * Implementa la lógica de Seguridad y Validación de Interfaz.
+         */
+        function taxServiceApi(precioBase, regionId, authToken) {
+            // S-001: PRUEBA DE SEGURIDAD
+            if (authToken !== TOKEN_VALIDO) {
+                return { status: 401, error: "Acceso Denegado. Token inválido." };
+            }
+
+            // I-002: PRUEBA DE INTEGRACIÓN FUNCIONAL (Validación de Datos)
+            if (typeof precioBase !== 'number' || precioBase <= 0) {
+                return { status: 400, error: "Precio base inválido." };
+            }
+
+            // Lógica de cálculo (Stub)
+            const tasaImpuesto = 0.15;
+            const precioConImpuesto = precioBase * (1 + tasaImpuesto);
+
+            return { status: 200, precio_final: parseFloat(precioConImpuesto.toFixed(2)) };
+        }
+
+        /**
+         * Simula la función de integración del ProductService (Módulo A).
+         */
+        function calcularPrecioTotal(productId, regionId, serviceAuthToken) {
+            const precioBase = productId === 102 ? 100.0 : 50.0;
+
+            // Llamada de Integración
+            const respuestaTax = taxServiceApi(precioBase, regionId, serviceAuthToken);
+
+            if (respuestaTax.status !== 200) {
+                // Manejo del error del servicio integrado
+                return { status: 503, error: `Error al integrar: ${respuestaTax.error}` };
+            }
+
+            return { status: 200, precio_final: respuestaTax.precio_final };
+        }
+
+        // --- 2. Casos de Prueba (Adaptación del código pytest a JS) ---
+
+        const testCases = [
+            {
+                id: "I-001",
+                title: "Flujo Correcto (Funcional)",
+                description: "Verifica que el precio se calcule correctamente (50.0 * 1.15 = 57.50).",
+                run: () => {
+                    const resultado = calcularPrecioTotal(101, 1, TOKEN_VALIDO);
+                    return resultado.status === 200 && resultado.precio_final === 57.50;
+                }
+            },
+            {
+                id: "I-002",
+                title: "Validación de Interfaz (Funcional)",
+                description: "Verifica que el TaxService rechace un precio negativo (simulando un dato inválido).",
+                run: () => {
+                    // Prueba directamente la interfaz del servicio para aislar la validación
+                    const resultadoTax = taxServiceApi(-10.0, 1, TOKEN_VALIDO);
+                    return resultadoTax.status === 400 && resultadoTax.error.includes("Precio base inválido");
+                }
+            },
+            {
+                id: "S-001",
+                title: "Autorización Service-to-Service (Seguridad)",
+                description: "Verifica que el TaxService rechace una llamada con un token de integración INVÁLIDO.",
+                run: () => {
+                    // Intento de llamar al servicio interno con token inválido
+                    const resultado = calcularPrecioTotal(102, 1, TOKEN_INVALIDO);
+                    // El ProductService debe devolver 503 y contener el mensaje de denegación
+                    return resultado.status === 503 && resultado.error.includes("Acceso Denegado");
+                }
+            }
+        ];
+
+        // --- 3. Ejecutor de Pruebas e Interfaz de Usuario ---
+
+        function runIntegrationTests() {
+            document.getElementById('initial-message').style.display = 'none';
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+            
+            testCases.forEach(test => {
+                let passed = false;
+                try {
+                    passed = test.run();
+                } catch (e) {
+                    console.error(`Error en la prueba ${test.id}:`, e);
+                }
+
+                const statusClass = passed ? 'status-pass' : 'status-fail';
+                const statusIcon = passed ? '✅' : '❌';
+                const statusText = passed ? 'PASÓ' : 'FALLÓ';
+
+                const resultHtml = `
+                    <div class="test-result-box ${statusClass}">
+                        <span class="icon">${statusIcon}</span>
+                        <div>
+                            <p class="font-semibold">${test.id}: ${test.title} (${statusText})</p>
+                            <p class="text-sm">${test.description}</p>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += resultHtml;
+            });
+        }
+    </script>
+
+</body>
+</html>
