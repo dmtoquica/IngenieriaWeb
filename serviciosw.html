@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller: Desarrollo de Servicios Web, Calidad y Seguridad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is structured as a single-page, vertical-scrolling workshop guide, mirroring the 7 key phases of the software development lifecycle task. A fixed sidebar provides quick navigation, enhancing usability by allowing students to jump between sections during the 1-hour workshop. This linear, phased approach is chosen for its clarity and direct mapping to the project's requirements, making it easy for students to follow along step-by-step. Interactive elements like code snippets with copy buttons and HTML-based diagrams are included to make the practical session more efficient. -->
+    <!-- Visualization & Content Choices:
+        - Report Info: Project Lifecycle -> Goal: Organize -> Viz/Presentation: Vertical sections with sidebar navigation -> Interaction: Clicking nav links scrolls to section -> Justification: Provides a clear, linear roadmap for the workshop.
+        - Report Info: MVC Architecture -> Goal: Organize/Inform -> Viz/Presentation: HTML/CSS diagram -> Interaction: Static visual aid -> Justification: Clearly illustrates separation of concerns without using prohibited SVG/image files.
+        - Report Info: CI Pipeline -> Goal: Organize/Inform -> Viz/Presentation: HTML/CSS diagram -> Interaction: Static visual aid -> Justification: Visually explains the automated workflow stages in a simple, accessible format.
+        - Report Info: Code Examples (Express, Jest, YAML) -> Goal: Inform -> Viz/Presentation: Pre-formatted code blocks -> Interaction: Copy-to-clipboard button -> Justification: Allows students to easily reuse code, speeding up the practical workshop.
+        - Library/Method: Vanilla JS for interactions, Tailwind CSS for layout and styling. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #383838;
+        }
+        .active-nav {
+            background-color: #E3DED8;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+        .prose-custom pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .prose-custom pre:hover .copy-btn {
+            opacity: 1;
+        }
+        .diagram-box {
+            border: 2px solid #D1C7BC;
+            background-color: #F7F4F1;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #928A81;
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="relative min-h-screen md:flex">
+        <aside class="hidden md:block w-64 bg-[#F3EEEA] text-[#6B6B6B] p-4 space-y-2 fixed h-full">
+            <h2 class="text-xl font-bold text-[#383838] mb-4">Fases del Taller</h2>
+            <nav id="desktop-nav" class="space-y-1">
+                <a href="#fase1" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#E3DED8] hover:text-[#1a1a1a]">1. Definición</a>
+                <a href="#fase2" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#E3DED8] hover:text-[#1a1a1a]">2. Desarrollo</a>
+                <a href="#fase3" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#E3DED8] hover:text-[#1a1a1a]">3. Integración</a>
+                <a href="#fase4" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#E3DED8] hover:text-[#1a1a1a]">4. CI</a>
+                <a href="#fase5" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#E3DED8] hover:text-[#1a1a1a]">5. Pruebas</a>
+                <a href="#fase6" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#E3DED8] hover:text-[#1a1a1a]">6. Entrega</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 md:ml-64 p-6 md:p-10">
+            <header class="mb-10">
+                <h1 class="text-4xl font-bold text-[#3D3A36] tracking-tight">Taller: Desarrollo de Servicios Web, Calidad y Seguridad</h1>
+                <p class="mt-2 text-lg text-[#6B6B6B]">Una guía práctica de 1 hora para construir, probar y desplegar una API RESTful con las mejores prácticas.</p>
+            </header>
+
+            <div class="prose-custom max-w-none space-y-16">
+                <section id="fase1">
+                    <h2 class="text-3xl font-semibold border-b-2 border-[#D1C7BC] pb-2">Fase 1: Definición y Arquitectura</h2>
+                    <p>En esta primera fase, definimos qué vamos a construir y cómo lo vamos a estructurar. Un buen plan es la base de un proyecto sólido. Nuestro objetivo es crear una API RESTful para gestionar una lista de tareas (To-Do), una funcionalidad simple pero ideal para aprender los conceptos clave.</p>
+                    
+                    <h3 class="text-xl font-medium mt-6">Arquitectura Seleccionada: MVC (Modelo-Vista-Controlador)</h3>
+                    <p>Elegimos el patrón MVC porque separa claramente las responsabilidades: el <strong>Modelo</strong> maneja los datos, la <strong>Vista</strong> (en nuestro caso, la respuesta JSON) presenta los datos, y el <strong>Controlador</strong> gestiona la lógica de la aplicación. Esta separación facilita el mantenimiento, las pruebas y la escalabilidad.</p>
+                    
+                    <div class="mt-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                        <h4 class="font-semibold text-center mb-4">Flujo de una Petición en MVC</h4>
+                        <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                            <div class="diagram-box w-full md:w-1/4">Usuario (Cliente)</div>
+                            <div class="arrow transform md:rotate-0 rotate-90">&rarr;</div>
+                            <div class="diagram-box w-full md:w-1/4">Controlador</div>
+                            <div class="arrow transform md:rotate-0 rotate-90">&harr;</div>
+                            <div class="diagram-box w-full md:w-1/4">Modelo (Datos)</div>
+                        </div>
+                         <p class="text-center text-sm mt-4 text-gray-600">El controlador recibe la petición, interactúa con el modelo para obtener/modificar datos y envía la respuesta.</p>
+                    </div>
+
+                    <h3 class="text-xl font-medium mt-6">Estructura de Directorios Sugerida</h3>
+                    <p>Una estructura organizada es fundamental. Aquí tienes una propuesta para un proyecto con Express.js:</p>
+                    <pre><code>/proyecto-api
+├── /controllers     # Lógica de negocio
+│   └── task.controller.js
+├── /models          # Definición de datos
+│   └── task.model.js
+├── /routes          # Definición de endpoints
+│   └── task.routes.js
+├── /tests           # Pruebas automatizadas
+│   └── task.test.js
+├── .gitignore
+├── app.js           # Archivo principal del servidor
+└── package.json</code></pre>
+                </section>
+                
+                <section id="fase2">
+                    <h2 class="text-3xl font-semibold border-b-2 border-[#D1C7BC] pb-2">Fase 2: Desarrollo de los Servicios Web</h2>
+                    <p>Ahora implementamos los endpoints de nuestra API. Nos enfocaremos en la calidad y seguridad desde el principio, aplicando validación de datos, manejo de errores y autenticación básica.</p>
+
+                    <h3 class="text-xl font-medium mt-6">Ejemplo: Endpoint `POST /tasks` con Express.js</h3>
+                    <p>Este endpoint creará una nueva tarea. Observa cómo validamos que el campo `title` no esté vacío.</p>
+                    <pre><code>// En /controllers/task.controller.js
+
+const tasks = []; 
+let currentId = 1;
+
+exports.createTask = (req, res) => {
+    const { title, description } = req.body;
+
+    // Validación básica
+    if (!title) {
+        return res.status(400).json({ error: 'El campo "title" es obligatorio.' });
+    }
+
+    const newTask = {
+        id: currentId++,
+        title,
+        description: description || '',
+        completed: false
+    };
+
+    tasks.push(newTask);
+
+    // Respuesta exitosa
+    res.status(201).json(newTask);
+};</code></pre>
+
+                    <h3 class="text-xl font-medium mt-6">Documentación de Endpoints</h3>
+                    <p>Documentar es crucial para que otros (¡o tu futuro yo!) entiendan cómo usar tu API.</p>
+                     <div class="overflow-x-auto bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                        <table class="min-w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="py-2 px-3 text-left font-semibold">Endpoint</th>
+                                    <th class="py-2 px-3 text-left font-semibold">Método</th>
+                                    <th class="py-2 px-3 text-left font-semibold">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="py-2 px-3 font-mono">/tasks</td>
+                                    <td class="py-2 px-3 font-mono">GET</td>
+                                    <td class="py-2 px-3">Obtiene todas las tareas.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-3 font-mono">/tasks</td>
+                                    <td class="py-2 px-3 font-mono">POST</td>
+                                    <td class="py-2 px-3">Crea una nueva tarea.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="fase3">
+                    <h2 class="text-3xl font-semibold border-b-2 border-[#D1C7BC] pb-2">Fase 3: Configurar Integración Básica</h2>
+                    <p>Preparamos nuestro entorno para el trabajo colaborativo y automatizado. El control de versiones con Git es el primer paso indispensable.</p>
+                    <h3 class="text-xl font-medium mt-6">Control de Versiones con Git</h3>
+                    <p>Git nos permite rastrear cambios, colaborar en equipo y revertir errores. Todo proyecto profesional debe estar en un repositorio Git.</p>
+                    <pre><code># 1. Iniciar el repositorio
+git init
+
+# 2. Añadir todos los archivos para el primer commit
+git add .
+
+# 3. Guardar los cambios con un mensaje descriptivo
+git commit -m "Initial commit: project setup"
+
+# 4. (Opcional) Conectar con un repositorio remoto (ej. GitHub)
+# git remote add origin https://github.com/tu-usuario/tu-repo.git
+# git push -u origin main</code></pre>
+                    
+                    <h3 class="text-xl font-medium mt-6">Scripts de NPM</h3>
+                    <p>En `package.json`, definimos atajos para tareas comunes como iniciar el servidor y ejecutar pruebas. Esto estandariza los comandos para todo el equipo.</p>
+                    <pre><code>// En package.json
+"scripts": {
+  "start": "node app.js",
+  "dev": "nodemon app.js",
+  "test": "jest"
+}</code></pre>
+                </section>
+                
+                <section id="fase4">
+                    <h2 class="text-3xl font-semibold border-b-2 border-[#D1C7BC] pb-2">Fase 4: Implementar Integración Continua (CI)</h2>
+                    <p>La Integración Continua (CI) automatiza la compilación y prueba del código cada vez que se realiza un cambio. Usaremos GitHub Actions por su excelente integración con GitHub.</p>
+
+                    <h3 class="text-xl font-medium mt-6">Pipeline de CI con GitHub Actions</h3>
+                    <p>Este pipeline se activará con cada `push` a la rama principal. Instalará las dependencias y ejecutará las pruebas automáticamente.</p>
+
+                    <div class="mt-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                        <h4 class="font-semibold text-center mb-4">Flujo del Pipeline de CI</h4>
+                        <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-2">
+                            <div class="diagram-box w-full md:w-1/5">Git Push</div>
+                            <div class="arrow transform md:rotate-0 rotate-90">&rarr;</div>
+                            <div class="diagram-box w-full md:w-1/5">GitHub Actions</div>
+                            <div class="arrow transform md:rotate-0 rotate-90">&rarr;</div>
+                            <div class="diagram-box w-full md:w-1/5">Instalar Deps</div>
+                            <div class="arrow transform md:rotate-0 rotate-90">&rarr;</div>
+                            <div class="diagram-box w-full md:w-1/5">Ejecutar Pruebas</div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-medium mt-6">Archivo de Workflow (`.github/workflows/ci.yml`)</h3>
+                    <p>Crea esta estructura de carpetas y archivo en la raíz de tu proyecto para configurar la automatización.</p>
+                    <pre><code>name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v2
+
+    - name: Usar Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.x'
+    
+    - name: Instalar dependencias
+      run: npm install
+
+    - name: Ejecutar pruebas
+      run: npm test
+</code></pre>
+                </section>
+
+                <section id="fase5">
+                    <h2 class="text-3xl font-semibold border-b-2 border-[#D1C7BC] pb-2">Fase 5: Pruebas y Validación</h2>
+                    <p>Las pruebas automatizadas garantizan que nuestro código funciona como se espera y nos alertan si un cambio introduce un error. Usaremos Jest, un framework popular para pruebas en JavaScript.</p>
+                    
+                    <h3 class="text-xl font-medium mt-6">Prueba Unitaria con Jest</h3>
+                    <p>Aquí probamos el controlador `createTask` para asegurar que devuelve un error 400 si el título no se proporciona.</p>
+                    <pre><code>// En /tests/task.test.js
+const { createTask } = require('../controllers/task.controller');
+
+describe('Task Controller', () => {
+
+  it('debería devolver un error 400 si no se proporciona el título', () => {
+    const req = {
+      body: { description: 'Una tarea sin título' }
+    };
+    
+    // Mock de la función de respuesta de Express
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    };
+
+    createTask(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ error: 'El campo "title" es obligatorio.' });
+  });
+
+});
+</code></pre>
+                    <p>Al ejecutar `npm test`, Jest buscará y correrá todos los archivos `*.test.js`, y el resultado se verá en nuestro pipeline de CI.</p>
+                </section>
+
+                <section id="fase6">
+                    <h2 class="text-3xl font-semibold border-b-2 border-[#D1C7BC] pb-2">Fase 6: Documentación y Entrega</h2>
+                    <p>El paso final es empaquetar nuestro proyecto para que otros puedan entenderlo, usarlo y desplegarlo. Una buena documentación es tan importante como un buen código.</p>
+
+                    <h3 class="text-xl font-medium mt-6">Guía de Usuario (`README.md`)</h3>
+                    <p>El archivo `README.md` es la puerta de entrada a tu proyecto. Debe incluir:</p>
+                    <ul class="list-disc list-inside space-y-2 mt-2">
+                        <li><strong>Descripción del proyecto:</strong> ¿Qué hace esta API?</li>
+                        <li><strong>Requisitos previos:</strong> ¿Qué necesita un desarrollador para ejecutarlo (Node.js, npm)?</li>
+                        <li><strong>Instalación:</strong> Pasos claros, como `npm install`.</li>
+                        <li><strong>Uso:</strong> Cómo iniciar el servidor (`npm start`).</li>
+                        <li><strong>Endpoints:</strong> La tabla de endpoints que definimos anteriormente.</li>
+                    </ul>
+                    <h3 class="text-xl font-medium mt-6">Guía de Despliegue</h3>
+                    <p>En tipo guía pueden explicar como llevar la aplicación a producción, lo cual puede incluir:</p>
+                     <ul class="list-disc list-inside space-y-2 mt-2">
+                        <li>Configuración de variables de entorno (ej. `PORT`, `DATABASE_URL`).</li>
+                        <li>Instrucciones para plataformas como Heroku, Vercel o un servidor propio.</li>
+                        <li>Comandos para construir la aplicación si es necesario.</li>
+                    </ul>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('#desktop-nav a');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active-nav');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active-nav');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            navLinks.forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            const allPres = document.querySelectorAll('.prose-custom pre');
+            allPres.forEach(pre => {
+                const code = pre.querySelector('code');
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-btn';
+                copyButton.textContent = 'Copiar';
+                
+                copyButton.addEventListener('click', () => {
+                    navigator.clipboard.writeText(code.innerText).then(() => {
+                        copyButton.textContent = '¡Copiado!';
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copiar';
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Error al copiar:', err);
+                    });
+                });
+                
+                pre.appendChild(copyButton);
+            });
+        });
+    </script>
+</body>
+</html>
